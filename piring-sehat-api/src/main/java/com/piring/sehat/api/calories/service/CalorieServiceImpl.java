@@ -76,6 +76,12 @@ public class CalorieServiceImpl implements CalorieService {
         }
     }
 
+    @Override
+    public List<LocalDate> getActiveDatesByMonth(Jwt jwt, int year, int month) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        return repository.findDistinctEntryDatesByUserIdAndMonth(userId, year, month);
+    }
+
     // Helper method untuk memetakan Model -> DTO
     private CalorieResponse mapToResponse(CalorieLog log) {
         // Format Instant ke bentuk jam (HH:mm:ss) untuk Frontend

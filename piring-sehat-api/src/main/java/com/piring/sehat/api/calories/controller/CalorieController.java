@@ -51,6 +51,19 @@ public class CalorieController {
     }
 
     /**
+     * Mengambil daftar tanggal yang memiliki log kalori pada bulan dan tahun tertentu.
+     */
+    @GetMapping("/active-dates")
+    public ResponseEntity<ApiResponse<List<LocalDate>>> getActiveDatesByMonth(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestParam("year") int year,
+            @RequestParam("month") int month) {
+        
+        List<LocalDate> activeDates = calorieService.getActiveDatesByMonth(jwt, year, month);
+        return ResponseEntity.ok(ApiResponse.success("Tanggal aktif berhasil diambil", activeDates));
+    }
+
+    /**
      * Menghapus log kalori berdasarkan ID.
      */
     @DeleteMapping("/{id}")

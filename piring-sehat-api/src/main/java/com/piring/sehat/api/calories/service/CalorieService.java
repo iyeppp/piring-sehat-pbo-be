@@ -23,4 +23,6 @@ public interface CalorieService {
     List<CalorieResponse> getCalorieLogsByDate(Jwt jwt, LocalDate date);
     
     void deleteCalorieLog(Jwt jwt, UUID logId);
+
+    List<LocalDate> getActiveDatesByMonth(Jwt jwt, int year, int month);
 }
