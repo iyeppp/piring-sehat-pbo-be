@@ -28,17 +28,19 @@ public class UserProfile {
     private final String username;  // Nama pengguna
     private final String fullName;  // Nama lengkap
     private final String avatarUrl; // URL foto profil
+    private final String role;      // Role dari database (moderator / dll)
 
     /**
      * Konstruktor: Satu-satunya cara untuk mengisi data objek ini.
      * Setelah objek dibuat, nilainya tidak bisa diubah lagi (Immutable Object).
      */
-    public UserProfile(String id, String email, String username, String fullName, String avatarUrl) {
+    public UserProfile(String id, String email, String username, String fullName, String avatarUrl, String role) {
         this.id = id;
         this.email = email;
         this.username = username;
         this.fullName = fullName;
         this.avatarUrl = avatarUrl;
+        this.role = role;
     }
 
     // ─── GETTER PUBLIK: Akses Baca yang Terkontrol ───
@@ -62,5 +64,9 @@ public class UserProfile {
 
     public String getAvatarUrl() {
         return this.avatarUrl;
+    }
+
+    public String getRole() {
+        return this.role;
     }
 }

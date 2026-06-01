@@ -75,6 +75,7 @@ public class AuthController {
             profile.getUsername(),
             profile.getFullName(),
             profile.getAvatarUrl(),
+            profile.getRole(),
             LocalDateTime.now().toString(),     // Metadata waktu respons
             "JWT_VERIFIED"                       // Status verifikasi
         );

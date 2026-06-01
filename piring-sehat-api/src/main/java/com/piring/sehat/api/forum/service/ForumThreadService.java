@@ -26,4 +26,12 @@ public interface ForumThreadService {
     ForumThreadResponse updateThread(Jwt jwt, UUID id, ForumThreadRequest request);
     
     void deleteThread(Jwt jwt, UUID id);
+
+    com.piring.sehat.api.forum.dto.ForumReplyResponse createReply(Jwt jwt, UUID threadId, com.piring.sehat.api.forum.dto.ForumReplyRequest request);
+
+    List<com.piring.sehat.api.forum.dto.ForumReplyResponse> getRepliesByThreadId(UUID threadId);
+
+    void deleteReply(Jwt jwt, UUID replyId);
+
+    com.piring.sehat.api.forum.dto.ForumReplyResponse updateReply(Jwt jwt, UUID replyId, com.piring.sehat.api.forum.dto.ForumReplyRequest request);
 }

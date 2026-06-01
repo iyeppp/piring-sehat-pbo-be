@@ -26,4 +26,24 @@ public interface ForumThreadRepository extends JpaRepository<ForumThread, UUID> 
     
     // Mengecek spesifik forum milik author tertentu (berguna untuk update/delete agar aman)
     ForumThread findByIdAndAuthorId(UUID id, UUID authorId);
+
+    // Mengambil role pengguna dari tabel public.user_profiles berdasarkan UUID
+    @org.springframework.data.jpa.repository.Query(
+        value = "SELECT role FROM public.user_profiles WHERE id = :userId",
+        nativeQuery = true
+    )
+    String getUserRole(java.util.UUID userId);
+
+    // Projection untuk efisiensi pengambilan profile pengguna (username & avatar_url)
+    interface AuthorProfileProjection {
+        String getUsername();
+        String getAvatarUrl();
+    }
+
+    // Mengambil username dan avatar_url pengguna dalam satu kali query (Menghindari N+1 redundant queries)
+    @org.springframework.data.jpa.repository.Query(
+        value = "SELECT username, avatar_url AS avatarUrl FROM public.user_profiles WHERE id = :userId",
+        nativeQuery = true
+    )
+    AuthorProfileProjection findAuthorProfileById(java.util.UUID userId);
 }

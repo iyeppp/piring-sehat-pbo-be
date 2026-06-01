@@ -111,4 +111,61 @@ public class ForumThreadController {
             return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
         }
     }
+
+    /**
+     * Endpoint untuk membuat balasan pada suatu thread.
+     */
+    @PostMapping("/{id}/replies")
+    public ResponseEntity<ApiResponse<com.piring.sehat.api.forum.dto.ForumReplyResponse>> createReply(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID id,
+            @Valid @RequestBody com.piring.sehat.api.forum.dto.ForumReplyRequest request) {
+        try {
+            com.piring.sehat.api.forum.dto.ForumReplyResponse response = forumService.createReply(jwt, id, request);
+            return ResponseEntity.ok(ApiResponse.success("Balasan berhasil dikirim", response));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
+        }
+    }
+
+    /**
+     * Endpoint untuk mengambil semua balasan dari suatu thread.
+     */
+    @GetMapping("/{id}/replies")
+    public ResponseEntity<ApiResponse<List<com.piring.sehat.api.forum.dto.ForumReplyResponse>>> getReplies(
+            @PathVariable UUID id) {
+        List<com.piring.sehat.api.forum.dto.ForumReplyResponse> replies = forumService.getRepliesByThreadId(id);
+        return ResponseEntity.ok(ApiResponse.success("Berhasil mengambil data balasan", replies));
+    }
+
+    /**
+     * Endpoint untuk menghapus balasan (hanya pembuat dan moderator yang bisa).
+     */
+    @DeleteMapping("/replies/{replyId}")
+    public ResponseEntity<ApiResponse<Void>> deleteReply(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID replyId) {
+        try {
+            forumService.deleteReply(jwt, replyId);
+            return ResponseEntity.ok(ApiResponse.success("Balasan berhasil dihapus", null));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
+        }
+    }
+
+    /**
+     * Endpoint untuk mengedit balasan (hanya pembuat yang bisa).
+     */
+    @PutMapping("/replies/{replyId}")
+    public ResponseEntity<ApiResponse<com.piring.sehat.api.forum.dto.ForumReplyResponse>> updateReply(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID replyId,
+            @Valid @RequestBody com.piring.sehat.api.forum.dto.ForumReplyRequest request) {
+        try {
+            com.piring.sehat.api.forum.dto.ForumReplyResponse response = forumService.updateReply(jwt, replyId, request);
+            return ResponseEntity.ok(ApiResponse.success("Balasan berhasil diperbarui", response));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
+        }
+    }
 }
