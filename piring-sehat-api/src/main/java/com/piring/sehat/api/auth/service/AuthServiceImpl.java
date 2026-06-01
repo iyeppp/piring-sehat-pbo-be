@@ -1,10 +1,12 @@
 package com.piring.sehat.api.auth.service;
 
 import com.piring.sehat.api.auth.model.UserProfile;
+import com.piring.sehat.api.forum.repository.ForumThreadRepository;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * =====================================================================
@@ -37,6 +39,12 @@ import java.util.Map;
 @Service // Menandai kelas ini sebagai Service Bean yang dikelola Spring
 public class AuthServiceImpl implements AuthService {
 
+    private final ForumThreadRepository forumThreadRepository;
+
+    public AuthServiceImpl(ForumThreadRepository forumThreadRepository) {
+        this.forumThreadRepository = forumThreadRepository;
+    }
+
     /**
      * Implementasi konkret dari kontrak interface AuthService.
      * '@Override' menandakan ini adalah Polimorfisme — method ini
@@ -52,6 +60,16 @@ public class AuthServiceImpl implements AuthService {
         // 1. Ambil data dasar dari token (ID pengguna dan Email)
         String id = jwt.getSubject();
         String email = jwt.getClaimAsString("email");
+
+        // Fetch the user role from public.user_profiles
+        String role = null;
+        if (id != null) {
+            try {
+                role = forumThreadRepository.getUserRole(UUID.fromString(id));
+            } catch (Exception e) {
+                // Fail-safe jika role tidak ditemukan atau error database
+            }
+        }
 
         // 2. Ambil data tambahan dari metadata pengguna
         Map<String, Object> userMetadata = jwt.getClaim("user_metadata");
@@ -79,6 +97,6 @@ public class AuthServiceImpl implements AuthService {
         }
 
         // 4. Buat dan kembalikan objek Model yang terenkapsulasi (Pilar #1: Enkapsulasi)
-        return new UserProfile(id, email, username, fullName, avatarUrl);
+        return new UserProfile(id, email, username, fullName, avatarUrl, role);
     }
 }

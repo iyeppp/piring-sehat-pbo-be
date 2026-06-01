@@ -61,6 +61,8 @@ public class SecurityConfig {
                 .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                 // Endpoint di bawah "/api/public/**" bersifat terbuka untuk umum (no auth required)
                 .requestMatchers("/api/public/**").permitAll()
+                // Izinkan akses publik untuk membaca forum dan balasannya
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/forums", "/api/forums/**").permitAll()
                 // Endpoint lainnya WAJIB melalui proses autentikasi (harus mengirimkan JWT valid)
                 .anyRequest().authenticated()
             )

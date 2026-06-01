@@ -30,6 +30,7 @@ public class UserProfileResponse {
     private final String username;
     private final String fullName;
     private final String avatarUrl;
+    private final String role;       // Field database role
     private final String timestamp;  // Field tambahan yang TIDAK ada di Model
     private final String status;     // Field tambahan: status verifikasi JWT
 
@@ -38,13 +39,14 @@ public class UserProfileResponse {
      * Menerima data dari Model domain dan menambahkan metadata respons API.
      */
     public UserProfileResponse(String id, String email, String username,
-                                String fullName, String avatarUrl,
+                                String fullName, String avatarUrl, String role,
                                 String timestamp, String status) {
         this.id = id;
         this.email = email;
         this.username = username;
         this.fullName = fullName;
         this.avatarUrl = avatarUrl;
+        this.role = role;
         this.timestamp = timestamp;
         this.status = status;
     }
@@ -69,6 +71,10 @@ public class UserProfileResponse {
 
     public String getAvatarUrl() {
         return this.avatarUrl;
+    }
+
+    public String getRole() {
+        return this.role;
     }
 
     public String getTimestamp() {
